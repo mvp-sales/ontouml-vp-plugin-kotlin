@@ -22,9 +22,10 @@ class ConvertModel2RefOntoUMLController : VPActionController {
         val viewManager = ApplicationManager.instance().viewManager
 
         createObservableWrapper(diagram)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(Schedulers.trampoline())
-                .subscribe({wrapper ->
+            .subscribeOn(Schedulers.computation())
+            .observeOn(Schedulers.trampoline())
+            .subscribe(
+                { wrapper ->
                     val fileChooser = viewManager.createJFileChooser()
                     val filter = FileNameExtensionFilter("Reference OntoUML (*.refontouml)", "refontouml")
                     fileChooser.fileFilter = filter
@@ -49,6 +50,7 @@ class ConvertModel2RefOntoUMLController : VPActionController {
                         }
                     }
                 },
-                {err -> viewManager.showMessage(err.message)})
+                { err -> viewManager.showMessage(err.message) }
+            )
     }
 }

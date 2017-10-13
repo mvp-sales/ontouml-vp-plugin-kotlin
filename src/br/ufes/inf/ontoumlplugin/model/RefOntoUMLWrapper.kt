@@ -2,7 +2,6 @@ package br.ufes.inf.ontoumlplugin.model
 
 import RefOntoUML.Classifier
 import RefOntoUML.Generalization
-import RefOntoUML.RefOntoUMLFactory
 import RefOntoUML.parser.SyntacticVerificator
 import RefOntoUML.util.RefOntoUMLFactoryUtil
 import com.vp.plugin.diagram.IDiagramUIModel
@@ -18,9 +17,9 @@ class RefOntoUMLWrapper {
     val classElements : MutableMap<IModelElement, RefOntoUML.Classifier>
     val ontoUmlPackage : RefOntoUML.Package
 
-    constructor() {
+    init {
         this.ontoUmlPackage = RefOntoUMLFactoryUtil.createPackage("package")
-        classElements = HashMap()
+        this.classElements = HashMap()
     }
 
     fun getOntoUMLClassifier(vpElement: IModelElement) : RefOntoUML.Classifier? {
@@ -40,9 +39,6 @@ class RefOntoUMLWrapper {
         }
         return null
     }
-
-
-
 }
 
 fun createObservableWrapper(vpDiagram : IDiagramUIModel) : io.reactivex.Observable<RefOntoUMLWrapper> {
@@ -65,7 +61,8 @@ fun createRefOntoUMLModel(vpDiagram: IDiagramUIModel) : RefOntoUMLWrapper {
 fun addClasses(wrapper : RefOntoUMLWrapper, vpDiagram: IDiagramUIModel) : RefOntoUMLWrapper {
     for(classElement in vpDiagram.toDiagramElementArray(IShapeTypeConstants.SHAPE_TYPE_CLASS)) {
         val vpClass = classElement.metaModelElement
-        val vpStereotype = if (vpClass.toStereotypeModelArray().size > 0) vpClass.toStereotypeModelArray()[0].name else "Subkind"
+        val vpStereotype = if (vpClass.toStereotypeModelArray().size > 0) vpClass.toStereotypeModelArray()[0].name
+                            else "Subkind"
         val ontoUmlClass = createOntoUmlClass(wrapper, vpClass, vpStereotype)
         wrapper.addOntoUMLClassifier(vpClass, ontoUmlClass)
     }
@@ -102,7 +99,8 @@ fun addGeneralizationSets(wrapper: RefOntoUMLWrapper, vpDiagram: IDiagramUIModel
 fun addAssociations(wrapper: RefOntoUMLWrapper, vpDiagram: IDiagramUIModel) : RefOntoUMLWrapper {
     for (associationElement in vpDiagram.toDiagramElementArray(IShapeTypeConstants.SHAPE_TYPE_ASSOCIATION)) {
         val vpAssociation = associationElement.metaModelElement as IAssociation
-        val vpStereotype = if (vpAssociation.toStereotypeArray().size > 0) vpAssociation.toStereotypeArray()[0] else ""
+        val vpStereotype = if (vpAssociation.toStereotypeArray().size > 0) vpAssociation.toStereotypeArray()[0]
+                            else ""
         createOntoUmlAssociation(wrapper, vpAssociation, vpStereotype)
     }
     return wrapper

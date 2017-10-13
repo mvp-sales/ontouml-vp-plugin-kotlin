@@ -5,9 +5,6 @@ import com.vp.plugin.model.IProjectListener
 import com.vp.plugin.model.IStereotype
 import com.vp.plugin.model.factory.IModelElementFactory
 import com.vp.plugin.model.ITaggedValueDefinition
-import com.vp.plugin.model.ITaggedValueDefinitionContainer
-
-
 
 class OntoUMLPluginProjectListener : IProjectListener {
 

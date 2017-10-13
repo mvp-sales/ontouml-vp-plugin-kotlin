@@ -2,6 +2,7 @@ package br.ufes.inf.ontoumlplugin.actions
 
 import RefOntoUML.*
 import RefOntoUML.parser.OntoUMLParser
+import RefOntoUML.util.RefOntoUMLResourceUtil
 import br.ufes.inf.ontoumlplugin.model.setClassStereotype
 import com.vp.plugin.ApplicationManager
 import com.vp.plugin.DiagramManager
@@ -16,18 +17,11 @@ import com.vp.plugin.model.IGeneralization
 import com.vp.plugin.model.IModelElement
 import com.vp.plugin.model.factory.IModelElementFactory
 import com.vp.plugin.model.IAssociationEnd
-import sun.net.PortConfig.getUpper
-import sun.net.PortConfig.getLower
-import RefOntoUML.util.RefOntoUMLFactoryUtil.setMultiplicity
 import br.ufes.inf.ontoumlplugin.model.setAssociationStereotype
 import br.ufes.inf.ontoumlplugin.model.setMeronymicAssociation
-import com.vp.plugin.model.IAssociation
 import com.vp.plugin.diagram.connector.IAssociationUIModel
-
-
-
-
-
+import javax.swing.JFileChooser
+import javax.swing.filechooser.FileNameExtensionFilter
 
 class LoadOntoUMLModelController : VPActionController {
 
@@ -35,17 +29,35 @@ class LoadOntoUMLModelController : VPActionController {
     val ontoUml2VpShapes : MutableMap<Classifier, IDiagramElement>
     val project = ApplicationManager.instance().projectManager.project
 
-    constructor() {
+    init {
         this.ontoUml2VpClasses = HashMap()
         this.ontoUml2VpShapes = HashMap()
     }
 
     override fun update(p0: VPAction?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun performAction(p0: VPAction?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val fileChooser = ApplicationManager.instance().viewManager.createJFileChooser()
+        val filter = FileNameExtensionFilter("Reference OntoUML (*.refontouml)", "refontouml")
+        fileChooser.fileFilter = filter
+        fileChooser.dialogTitle = "Selecione o arquivo RefOntoUML"
+        fileChooser.dialogType = JFileChooser.OPEN_DIALOG
+        val returnValue = fileChooser.showOpenDialog(null)
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            val file = fileChooser.selectedFile
+            try {
+                val model = RefOntoUMLResourceUtil.loadModel(file.absolutePath)
+                val ontoUmlPackage = model.contents[0] as Package
+                buildClassDiagram(ontoUmlPackage)
+            } catch (e : Exception) {
+                val viewManager = ApplicationManager.instance().viewManager
+                viewManager.showMessage(e.message)
+            }
+        }
+
     }
 
     private fun buildClassDiagram(ontoUmlPackage : Package) {

@@ -2,8 +2,6 @@ package br.ufes.inf.ontoumlplugin.model
 
 import com.vp.plugin.model.IAssociationEnd
 
-
-
 class AssociationMultiplicity {
 
     val minMult : Int

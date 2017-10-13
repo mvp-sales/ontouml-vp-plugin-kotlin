@@ -6,10 +6,6 @@ import com.vp.plugin.model.IClass
 import com.vp.plugin.model.IProject
 import com.vp.plugin.model.IStereotype
 import com.vp.plugin.model.factory.IModelElementFactory
-import com.vp.plugin.model.ITaggedValue
-import com.jniwrapper.win32.LastError.setValue
-
-
 
 fun setClassStereotype(vpClass: IClass, ontoUmlElement: RefOntoUML.Classifier, project : IProject) : IClass {
     if (ontoUmlElement is RefOntoUML.Kind){

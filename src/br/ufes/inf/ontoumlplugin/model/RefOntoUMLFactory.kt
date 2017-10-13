@@ -4,50 +4,30 @@ import RefOntoUML.Association
 import RefOntoUML.Classifier
 import RefOntoUML.util.RefOntoUMLFactoryUtil
 import com.vp.plugin.model.*
-import org.apache.batik.dom.svg.AbstractSVGPreserveAspectRatio.getValueAsString
-import RefOntoUML.RefOntoUMLPackage.STRUCTURATION
-import RefOntoUML.RefOntoUMLPackage.MATERIAL_ASSOCIATION
-import RefOntoUML.RefOntoUMLPackage.FORMAL_ASSOCIATION
-import RefOntoUML.RefOntoUMLPackage.MEDIATION
-import RefOntoUML.RefOntoUMLPackage.CHARACTERIZATION
 import com.vp.plugin.model.IAssociationEnd
-import com.sun.xml.internal.ws.api.message.AddressingUtils.getTo
-import com.sun.xml.internal.ws.api.message.AddressingUtils.getTo
-import RefOntoUML.RefOntoUMLPackage.COMPONENT_OF
-
-
-
-
-
-
 
 fun createOntoUmlClass(wrapper: RefOntoUMLWrapper, vpElement: IModelElement, stereotypeStr : String) : Classifier {
     var classifier: RefOntoUML.Classifier
     val classType = OntoUMLClassType.fromString(stereotypeStr)
 
-    if (classType == null) {
-        classifier = RefOntoUMLFactoryUtil.createSubKind(vpElement.name, wrapper.ontoUmlPackage)
-    } else {
-
-        when (classType) {
-            OntoUMLClassType.KIND -> classifier = RefOntoUMLFactoryUtil.createKind(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.SUBKIND -> classifier = RefOntoUMLFactoryUtil.createSubKind(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.ROLE -> classifier = RefOntoUMLFactoryUtil.createRole(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.PHASE -> classifier = RefOntoUMLFactoryUtil.createPhase(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.COLLECTIVE -> classifier = RefOntoUMLFactoryUtil.createCollective(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.QUANTITY -> classifier = RefOntoUMLFactoryUtil.createQuantity(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.CATEGORY -> classifier = RefOntoUMLFactoryUtil.createCategory(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.ROLEMIXIN -> classifier = RefOntoUMLFactoryUtil.createRoleMixin(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.RELATOR -> classifier = RefOntoUMLFactoryUtil.createRelator(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.MIXIN -> classifier = RefOntoUMLFactoryUtil.createMixin(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.MODE -> classifier = RefOntoUMLFactoryUtil.createMode(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.PERCEIVABLE_QUALITY -> classifier = RefOntoUMLFactoryUtil.createPerceivableQuality(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.NON_PERCEIVABLE_QUALITY -> classifier = RefOntoUMLFactoryUtil.createNonPerceivableQuality(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.NOMINAL_QUALITY -> classifier = RefOntoUMLFactoryUtil.createNominalQuality(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.DATA_TYPE -> classifier = RefOntoUMLFactoryUtil.createDataType(vpElement.name, wrapper.ontoUmlPackage)
-            OntoUMLClassType.PRIMITIVE_TYPE -> classifier = RefOntoUMLFactoryUtil.createPrimitiveType(vpElement.name, wrapper.ontoUmlPackage)
-            else -> classifier = RefOntoUMLFactoryUtil.createKind(vpElement.name, wrapper.ontoUmlPackage)
-        }
+    when (classType) {
+        OntoUMLClassType.KIND -> classifier = RefOntoUMLFactoryUtil.createKind(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.SUBKIND -> classifier = RefOntoUMLFactoryUtil.createSubKind(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.ROLE -> classifier = RefOntoUMLFactoryUtil.createRole(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.PHASE -> classifier = RefOntoUMLFactoryUtil.createPhase(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.COLLECTIVE -> classifier = RefOntoUMLFactoryUtil.createCollective(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.QUANTITY -> classifier = RefOntoUMLFactoryUtil.createQuantity(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.CATEGORY -> classifier = RefOntoUMLFactoryUtil.createCategory(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.ROLEMIXIN -> classifier = RefOntoUMLFactoryUtil.createRoleMixin(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.RELATOR -> classifier = RefOntoUMLFactoryUtil.createRelator(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.MIXIN -> classifier = RefOntoUMLFactoryUtil.createMixin(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.MODE -> classifier = RefOntoUMLFactoryUtil.createMode(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.PERCEIVABLE_QUALITY -> classifier = RefOntoUMLFactoryUtil.createPerceivableQuality(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.NON_PERCEIVABLE_QUALITY -> classifier = RefOntoUMLFactoryUtil.createNonPerceivableQuality(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.NOMINAL_QUALITY -> classifier = RefOntoUMLFactoryUtil.createNominalQuality(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.DATA_TYPE -> classifier = RefOntoUMLFactoryUtil.createDataType(vpElement.name, wrapper.ontoUmlPackage)
+        OntoUMLClassType.PRIMITIVE_TYPE -> classifier = RefOntoUMLFactoryUtil.createPrimitiveType(vpElement.name, wrapper.ontoUmlPackage)
+        else -> classifier = RefOntoUMLFactoryUtil.createSubKind(vpElement.name, wrapper.ontoUmlPackage)
     }
 
     classifier = addOntoUMLAttributes(classifier, wrapper, vpElement)
@@ -75,21 +55,19 @@ fun createOntoUmlAssociation(wrapper: RefOntoUMLWrapper, vpAssociation: IAssocia
     val association: Association
     val relationType = OntoUMLRelationshipType.fromString(stereotypeStr)
 
-    if (relationType == null) {
-        association = createCommonAssociation(wrapper, vpAssociation, null)
-    } else {
-        when (relationType) {
-            OntoUMLRelationshipType.CHARACTERIZATION, OntoUMLRelationshipType.MEDIATION, OntoUMLRelationshipType.FORMAL_ASSOCIATION, OntoUMLRelationshipType.MATERIAL_ASSOCIATION, OntoUMLRelationshipType.STRUCTURATION -> association = createCommonAssociation(wrapper, vpAssociation, relationType)
-            OntoUMLRelationshipType.COMPONENT_OF, OntoUMLRelationshipType.MEMBER_OF, OntoUMLRelationshipType.SUBQUANTITY_OF, OntoUMLRelationshipType.SUBCOLLECTION_OF -> association = createMeronymicAssociation(wrapper, vpAssociation, relationType)
-            else -> association = createCommonAssociation(wrapper, vpAssociation, relationType)
-        }
+    when (relationType) {
+        OntoUMLRelationshipType.CHARACTERIZATION, OntoUMLRelationshipType.MEDIATION, OntoUMLRelationshipType.FORMAL_ASSOCIATION, OntoUMLRelationshipType.MATERIAL_ASSOCIATION, OntoUMLRelationshipType.STRUCTURATION ->
+            association = createCommonAssociation(wrapper, vpAssociation, relationType)
+        OntoUMLRelationshipType.COMPONENT_OF, OntoUMLRelationshipType.MEMBER_OF, OntoUMLRelationshipType.SUBQUANTITY_OF, OntoUMLRelationshipType.SUBCOLLECTION_OF ->
+            association = createMeronymicAssociation(wrapper, vpAssociation, relationType)
+        else -> association = createCommonAssociation(wrapper, vpAssociation, relationType)
     }
 
     return association
 }
 
 fun createCommonAssociation(wrapper: RefOntoUMLWrapper, vpAssociation: IAssociation, type : OntoUMLRelationshipType?) : Association {
-    var association: Association
+    val association: Association
 
     val source = wrapper.getOntoUMLClassifier(vpAssociation.from)
     val target = wrapper.getOntoUMLClassifier(vpAssociation.to)
@@ -100,83 +78,19 @@ fun createCommonAssociation(wrapper: RefOntoUMLWrapper, vpAssociation: IAssociat
     val multFrom = AssociationMultiplicity(assEndFrom.multiplicity)
     val multTo = AssociationMultiplicity(assEndTo.multiplicity)
 
-    if (type == null) {
-        association = RefOntoUMLFactoryUtil.createAssociation(source,
-                multFrom.minMult,
-                multFrom.maxMult,
-                vpAssociation.name,
-                target,
-                multTo.minMult,
-                multTo.maxMult,
-                wrapper.ontoUmlPackage)
-    } else {
-        when (type) {
-            OntoUMLRelationshipType.CHARACTERIZATION ->
-                if (target is RefOntoUML.Mode) {
-                    association = RefOntoUMLFactoryUtil.createCharacterization(target,
-                            multTo.minMult,
-                            multTo.maxMult,
-                            vpAssociation.name,
-                            source,
-                            multFrom.minMult,
-                            multFrom.maxMult,
-                            wrapper.ontoUmlPackage)
-                } else {
-                    association = RefOntoUMLFactoryUtil.createCharacterization(source,
-                            multFrom.minMult,
-                            multFrom.maxMult,
-                            vpAssociation.name,
-                            target,
-                            multTo.minMult,
-                            multTo.maxMult,
-                            wrapper.ontoUmlPackage)
-                }
-            OntoUMLRelationshipType.MEDIATION ->
-                if (target is RefOntoUML.Relator) {
-                    association = RefOntoUMLFactoryUtil.createMediation(target,
-                            multTo.minMult,
-                            multTo.maxMult,
-                            vpAssociation.name,
-                            source,
-                            multFrom.minMult,
-                            multFrom.maxMult,
-                            wrapper.ontoUmlPackage)
-                } else {
-                    association = RefOntoUMLFactoryUtil.createMediation(source,
-                            multFrom.minMult,
-                            multFrom.maxMult,
-                            vpAssociation.name,
-                            target,
-                            multTo.minMult,
-                            multTo.maxMult,
-                            wrapper.ontoUmlPackage)
-                }
-            OntoUMLRelationshipType.FORMAL_ASSOCIATION -> association = RefOntoUMLFactoryUtil.createFormalAssociation(source,
-                    multFrom.minMult,
-                    multFrom.maxMult,
-                    vpAssociation.name,
-                    target,
-                    multTo.minMult,
-                    multTo.maxMult,
-                    wrapper.ontoUmlPackage)
-            OntoUMLRelationshipType.MATERIAL_ASSOCIATION -> association = RefOntoUMLFactoryUtil.createMaterialAssociation(source,
-                    multFrom.minMult,
-                    multFrom.maxMult,
-                    vpAssociation.name,
-                    target,
-                    multTo.minMult,
-                    multTo.maxMult,
-                    wrapper.ontoUmlPackage)
-            OntoUMLRelationshipType.STRUCTURATION -> association = RefOntoUMLFactoryUtil.createStructuration(source,
-                    multFrom.minMult,
-                    multFrom.maxMult,
-                    vpAssociation.name,
-                    target,
-                    multTo.minMult,
-                    multTo.maxMult,
-                    wrapper.ontoUmlPackage)
-            else -> {
-                association = RefOntoUMLFactoryUtil.createAssociation(source,
+    when (type) {
+        OntoUMLRelationshipType.CHARACTERIZATION ->
+            if (target is RefOntoUML.Mode) {
+                association = RefOntoUMLFactoryUtil.createCharacterization(target,
+                        multTo.minMult,
+                        multTo.maxMult,
+                        vpAssociation.name,
+                        source,
+                        multFrom.minMult,
+                        multFrom.maxMult,
+                        wrapper.ontoUmlPackage)
+            } else {
+                association = RefOntoUMLFactoryUtil.createCharacterization(source,
                         multFrom.minMult,
                         multFrom.maxMult,
                         vpAssociation.name,
@@ -185,6 +99,62 @@ fun createCommonAssociation(wrapper: RefOntoUMLWrapper, vpAssociation: IAssociat
                         multTo.maxMult,
                         wrapper.ontoUmlPackage)
             }
+        OntoUMLRelationshipType.MEDIATION ->
+            if (target is RefOntoUML.Relator) {
+                association = RefOntoUMLFactoryUtil.createMediation(target,
+                        multTo.minMult,
+                        multTo.maxMult,
+                        vpAssociation.name,
+                        source,
+                        multFrom.minMult,
+                        multFrom.maxMult,
+                        wrapper.ontoUmlPackage)
+            } else {
+                association = RefOntoUMLFactoryUtil.createMediation(source,
+                        multFrom.minMult,
+                        multFrom.maxMult,
+                        vpAssociation.name,
+                        target,
+                        multTo.minMult,
+                        multTo.maxMult,
+                        wrapper.ontoUmlPackage)
+            }
+        OntoUMLRelationshipType.FORMAL_ASSOCIATION ->
+            association = RefOntoUMLFactoryUtil.createFormalAssociation(source,
+                multFrom.minMult,
+                multFrom.maxMult,
+                vpAssociation.name,
+                target,
+                multTo.minMult,
+                multTo.maxMult,
+                wrapper.ontoUmlPackage)
+        OntoUMLRelationshipType.MATERIAL_ASSOCIATION ->
+            association = RefOntoUMLFactoryUtil.createMaterialAssociation(source,
+                multFrom.minMult,
+                multFrom.maxMult,
+                vpAssociation.name,
+                target,
+                multTo.minMult,
+                multTo.maxMult,
+                wrapper.ontoUmlPackage)
+        OntoUMLRelationshipType.STRUCTURATION ->
+            association = RefOntoUMLFactoryUtil.createStructuration(source,
+                multFrom.minMult,
+                multFrom.maxMult,
+                vpAssociation.name,
+                target,
+                multTo.minMult,
+                multTo.maxMult,
+                wrapper.ontoUmlPackage)
+        else -> {
+            association = RefOntoUMLFactoryUtil.createAssociation(source,
+                    multFrom.minMult,
+                    multFrom.maxMult,
+                    vpAssociation.name,
+                    target,
+                    multTo.minMult,
+                    multTo.maxMult,
+                    wrapper.ontoUmlPackage)
         }
     }
 
@@ -220,7 +190,8 @@ fun createMeronymicAssociation(wrapper: RefOntoUMLWrapper, vpAssociation: IAssoc
     }
 
     when (type) {
-        OntoUMLRelationshipType.COMPONENT_OF -> association = RefOntoUMLFactoryUtil.createComponentOf(whole,
+        OntoUMLRelationshipType.COMPONENT_OF ->
+            association = RefOntoUMLFactoryUtil.createComponentOf(whole,
                 multWhole.minMult,
                 multWhole.maxMult,
                 vpAssociation.name,
@@ -228,7 +199,8 @@ fun createMeronymicAssociation(wrapper: RefOntoUMLWrapper, vpAssociation: IAssoc
                 multPart.minMult,
                 multPart.maxMult,
                 wrapper.ontoUmlPackage)
-        OntoUMLRelationshipType.MEMBER_OF -> association = RefOntoUMLFactoryUtil.createMemberOf(whole,
+        OntoUMLRelationshipType.MEMBER_OF ->
+            association = RefOntoUMLFactoryUtil.createMemberOf(whole,
                 multWhole.minMult,
                 multWhole.maxMult,
                 vpAssociation.name,
@@ -236,7 +208,8 @@ fun createMeronymicAssociation(wrapper: RefOntoUMLWrapper, vpAssociation: IAssoc
                 multPart.minMult,
                 multPart.maxMult,
                 wrapper.ontoUmlPackage)
-        OntoUMLRelationshipType.SUBQUANTITY_OF -> association = RefOntoUMLFactoryUtil.createSubQuantityOf(whole,
+        OntoUMLRelationshipType.SUBQUANTITY_OF ->
+            association = RefOntoUMLFactoryUtil.createSubQuantityOf(whole,
                 multWhole.minMult,
                 multWhole.maxMult,
                 vpAssociation.name,
@@ -244,7 +217,8 @@ fun createMeronymicAssociation(wrapper: RefOntoUMLWrapper, vpAssociation: IAssoc
                 multPart.minMult,
                 multPart.maxMult,
                 wrapper.ontoUmlPackage)
-        OntoUMLRelationshipType.SUBCOLLECTION_OF -> association = RefOntoUMLFactoryUtil.createSubCollectionOf(whole,
+        OntoUMLRelationshipType.SUBCOLLECTION_OF ->
+            association = RefOntoUMLFactoryUtil.createSubCollectionOf(whole,
                 multWhole.minMult,
                 multWhole.maxMult,
                 vpAssociation.name,
@@ -252,7 +226,8 @@ fun createMeronymicAssociation(wrapper: RefOntoUMLWrapper, vpAssociation: IAssoc
                 multPart.minMult,
                 multPart.maxMult,
                 wrapper.ontoUmlPackage)
-        else -> association = RefOntoUMLFactoryUtil.createComponentOf(whole,
+        else ->
+            association = RefOntoUMLFactoryUtil.createComponentOf(whole,
                 multWhole.minMult,
                 multWhole.maxMult,
                 vpAssociation.name,
