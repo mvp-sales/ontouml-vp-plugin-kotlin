@@ -1,0 +1,62 @@
+<plugin
+        id="br.ufes.inf.ontoumlplugin"
+        name="OntoUML Visual Paradigm Plugin"
+        description="OntoUML plugin for Visual Paradigm"
+        provider="Marcus Sales"
+        class="br.ufes.inf.ontoumlplugin.OntoUMLPlugin">
+    <runtime>
+        <library path="lib/menthor-refontouml.jar" relativePath="true" />
+        <library path="lib/org.eclipse.emf.common_2.12.0.v20160420-0247.jar" relativePath="true"/>
+        <library path="lib/org.eclipse.emf.ecore_2.12.0.v20160420-0247.jar" relativePath="true"/>
+        <library path="lib/org.eclipse.emf.ecore.xmi_2.12.0.v20160420-0247.jar" relativePath="true"/>
+        <library path="lib/org.eclipse.ocl_3.6.0.v20160523-1914.jar" relativePath="true" />
+        <library path="lib/lpg.runtime.java_2.0.17.v201004271640.jar" relativePath="true" />
+        <library path="lib/org.eclipse.ocl.common_1.4.0.v20160521-2033.jar" relativePath="true" />
+        <library path="lib/org.eclipse.ocl.ecore_3.6.0.v20160523-1914.jar" relativePath="true" />
+        <library path="lib/org.eclipse.ocl.edit_4.0.200.v20150611-1921.jar" relativePath="true" />
+        <library path="lib/org.eclipse.ocl.uml_5.2.0.v20160521-2033.jar" relativePath="true" />
+        <library path="lib/reactive-streams-1.0.0.jar" relativePath="true" />
+        <library path="lib/rxjava-2.1.0.jar" relativePath="true" />
+        <library path="lib/rxjava-reactive-streams-1.2.1.jar" relativePath="true" />
+    </runtime>
+
+    <actionSets>
+
+        <actionSet id="br.ufes.inf.ontoumlplugin.actionset">
+            <toolbar
+                    id="br.ufes.inf.ontoumlplugin.actions.toolbar1"
+                    orientation="north"
+                    index="last"/>
+            <action
+                    id="br.ufes.inf.ontoumlplugin.actionset.ConvertModelToRefOntoUML"
+                    actionType="generalAction"
+                    label="Convert OntoUML Model to RefOntoUML"
+                    tooltip="Convert OntoUML model to RefOntoUML"
+                    style="normal"
+                    toolbarPath="br.ufes.inf.ontoumlplugin.actions.toolbar1/#">
+                <actionController class="br.ufes.inf.ontoumlplugin.actions.ConvertModel2RefOntoUMLController"/>
+            </action>
+            <action
+                    id="br.ufes.inf.ontoumlplugin.actionset.ValidateOntoUMLModelAction"
+                    actionType="generalAction"
+                    label="Validate OntoUML Model"
+                    tooltip="Validate OntoUML Model"
+                    style="normal"
+                    toolbarPath="br.ufes.inf.ontoumlplugin.actions.toolbar1/#">
+                <actionController class="br.ufes.inf.ontoumlplugin.actions.ValidateOntoUMLModelController"/>
+            </action>
+            <action
+                    id="br.ufes.inf.ontoumlplugin.actionset.LoadOntoUMLModelAction"
+                    actionType="generalAction"
+                    label="Load OntoUML Model"
+                    tooltip="Load RefOntoUML File"
+                    style="normal"
+                    toolbarPath="br.ufes.inf.ontoumlplugin.actions.toolbar1/#">
+                <actionController class="br.ufes.inf.ontoumlplugin.actions.LoadOntoUMLModelController"/>
+            </action>
+        </actionSet>
+
+
+    </actionSets>
+
+</plugin>
