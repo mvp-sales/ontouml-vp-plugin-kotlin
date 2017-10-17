@@ -18,6 +18,8 @@
         <library path="lib/reactive-streams-1.0.0.jar" relativePath="true" />
         <library path="lib/rxjava-2.1.0.jar" relativePath="true" />
         <library path="lib/rxjava-reactive-streams-1.2.1.jar" relativePath="true" />
+        <library path="lib/kotlin-stdlib-1.1.50.jar" relativePath="true" />
+        <library path="lib/kotlin-stdlib-jre8-1.1.50.jar" relativePath="true" />
     </runtime>
 
     <actionSets>
