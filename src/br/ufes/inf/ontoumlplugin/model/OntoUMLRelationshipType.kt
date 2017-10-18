@@ -24,7 +24,7 @@ enum class OntoUMLRelationshipType(val text: String) {
             val stereotypes = project.toModelElementArray(IModelElementFactory.MODEL_TYPE_STEREOTYPE)
             for (e in stereotypes) {
                 val s = e as IStereotype
-                if (s.name == text) {
+                if (s.name.equals(text, true)) {
                     return s
                 }
             }
