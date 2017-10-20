@@ -23,6 +23,7 @@ class ValidateOntoUMLModelController : VPActionController {
             .observeOn(Schedulers.trampoline())
             .subscribe(
                 { verificator ->
+                    viewManager.showMessage(verificator.result)
                     for (elem in verificator.map.keys){
                         viewManager.showMessage(elem.toString())
                         val values = ArrayList(verificator.map[elem])

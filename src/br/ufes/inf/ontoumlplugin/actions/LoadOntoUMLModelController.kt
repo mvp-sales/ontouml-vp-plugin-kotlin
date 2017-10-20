@@ -75,6 +75,10 @@ class LoadOntoUMLModelController : VPActionController {
             createClass(diagramManager, diagram, c)
         }
 
+        for(primitive in parser.getAllInstances(PrimitiveType::class.java)) {
+            createClass(diagramManager, diagram, primitive)
+        }
+
         for (a in parser.associations) {
             val association = a as Association
             if (association is Meronymic) {

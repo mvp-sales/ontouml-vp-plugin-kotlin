@@ -13,7 +13,7 @@ enum class OntoUMLRelationshipType(val text: String) {
     companion object {
         fun fromString(text: String): OntoUMLRelationshipType? {
             for (b in OntoUMLRelationshipType.values()) {
-                if (b.text.toLowerCase() == text.toLowerCase()) {
+                if (b.text.equals(text, true)) {
                     return b
                 }
             }

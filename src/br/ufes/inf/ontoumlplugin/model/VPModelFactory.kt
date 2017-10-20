@@ -30,18 +30,18 @@ fun setClassStereotype(vpClass: IClass, ontoUmlElement: RefOntoUML.Classifier, p
         addStereotypeClass(vpClass, "Mixin", project);
     }else if(ontoUmlElement is RefOntoUML.Mode){
         addStereotypeClass(vpClass, "Mode", project);
-    }else if(ontoUmlElement is RefOntoUML.Quality){
-        addStereotypeClass(vpClass, "Quality", project);
-    }else if(ontoUmlElement is RefOntoUML.DataType){
-        addStereotypeClass(vpClass, "DataType", project);
-    }else if(ontoUmlElement is RefOntoUML.PrimitiveType){
-        addStereotypeClass(vpClass, "PrimitiveType", project);
     }else if(ontoUmlElement is RefOntoUML.PerceivableQuality){
         addStereotypeClass(vpClass, "PerceivableQuality", project);
     }else if(ontoUmlElement is RefOntoUML.NonPerceivableQuality){
         addStereotypeClass(vpClass, "NonPerceivableQuality", project);
     }else if(ontoUmlElement is RefOntoUML.NominalQuality){
         addStereotypeClass(vpClass, "NominalQuality", project);
+    }else if(ontoUmlElement is RefOntoUML.Quality){
+        addStereotypeClass(vpClass, "Quality", project);
+    }else if(ontoUmlElement is RefOntoUML.PrimitiveType){
+        addStereotypeClass(vpClass, "PrimitiveType", project);
+    }else if(ontoUmlElement is RefOntoUML.DataType){
+        addStereotypeClass(vpClass, "DataType", project);
     }
 
     val newVpClass = setVPAttributes(vpClass, ontoUmlElement)

@@ -22,7 +22,7 @@ enum class OntoUMLClassType(val text: String) {
     companion object {
         fun fromString(text: String): OntoUMLClassType? {
             for (b in OntoUMLClassType.values()) {
-                if (b.text.toLowerCase() == text.toLowerCase()) {
+                if (b.text.equals(text, true)) {
                     return b
                 }
             }
