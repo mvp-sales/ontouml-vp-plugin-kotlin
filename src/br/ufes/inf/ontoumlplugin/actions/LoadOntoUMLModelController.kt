@@ -39,6 +39,9 @@ class LoadOntoUMLModelController : VPActionController {
     }
 
     override fun performAction(p0: VPAction?) {
+        val viewManager = ApplicationManager.instance().viewManager
+        viewManager.clearMessages("br.ufes.inf.ontoumlplugin")
+
         val fileChooser = ApplicationManager.instance().viewManager.createJFileChooser()
         val filter = FileNameExtensionFilter("Reference OntoUML (*.refontouml)", "refontouml")
         fileChooser.fileFilter = filter
@@ -52,9 +55,9 @@ class LoadOntoUMLModelController : VPActionController {
                 val model = RefOntoUMLResourceUtil.loadModel(file.absolutePath)
                 val ontoUmlPackage = model.contents[0] as Package
                 buildClassDiagram(ontoUmlPackage)
+                viewManager.showMessage("Model loaded successfully", "br.ufes.inf.ontoumlplugin")
             } catch (e : Exception) {
-                val viewManager = ApplicationManager.instance().viewManager
-                viewManager.showMessage(e.message)
+                viewManager.showMessage(e.message, "br.ufes.inf.ontoumlplugin")
             }
         }
 

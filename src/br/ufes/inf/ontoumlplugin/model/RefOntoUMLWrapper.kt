@@ -4,12 +4,8 @@ import RefOntoUML.Classifier
 import RefOntoUML.Generalization
 import RefOntoUML.parser.SyntacticVerificator
 import RefOntoUML.util.RefOntoUMLFactoryUtil
-import com.vp.plugin.diagram.IDiagramUIModel
-import com.vp.plugin.diagram.IShapeTypeConstants
-import com.vp.plugin.model.IAssociation
-import com.vp.plugin.model.IGeneralization
-import com.vp.plugin.model.IGeneralizationSet
-import com.vp.plugin.model.IModelElement
+import com.vp.plugin.model.*
+import com.vp.plugin.model.factory.IModelElementFactory
 import io.reactivex.Observable
 
 class RefOntoUMLWrapper {
@@ -41,37 +37,37 @@ class RefOntoUMLWrapper {
     }
 }
 
-fun createObservableWrapper(vpDiagram : IDiagramUIModel) : io.reactivex.Observable<RefOntoUMLWrapper> {
+fun createObservableWrapper(vpProject: IProject) : io.reactivex.Observable<RefOntoUMLWrapper> {
     return Observable.fromCallable {
-        createRefOntoUMLModel(vpDiagram)
+        createRefOntoUMLModel(vpProject)
     }
 }
 
-fun createRefOntoUMLModel(vpDiagram: IDiagramUIModel) : RefOntoUMLWrapper {
+fun createRefOntoUMLModel(vpProject: IProject) : RefOntoUMLWrapper {
     var wrapper = RefOntoUMLWrapper()
 
-    wrapper = addClasses(wrapper, vpDiagram)
-    wrapper = addGeneralizations(wrapper, vpDiagram)
-    wrapper = addGeneralizationSets(wrapper, vpDiagram)
-    wrapper = addAssociations(wrapper, vpDiagram)
+    wrapper = addClasses(wrapper, vpProject)
+    wrapper = addGeneralizations(wrapper, vpProject)
+    wrapper = addGeneralizationSets(wrapper, vpProject)
+    wrapper = addAssociations(wrapper, vpProject)
 
     return wrapper
 }
 
-fun addClasses(wrapper : RefOntoUMLWrapper, vpDiagram: IDiagramUIModel) : RefOntoUMLWrapper {
-    for(classElement in vpDiagram.toDiagramElementArray(IShapeTypeConstants.SHAPE_TYPE_CLASS)) {
-        val vpClass = classElement.metaModelElement
+fun addClasses(wrapper: RefOntoUMLWrapper, vpProject: IProject) : RefOntoUMLWrapper {
+    vpProject.toAllLevelModelElementArray(IModelElementFactory.MODEL_TYPE_CLASS).forEach {
+        val vpClass = it as IClass
         val vpStereotype = if (vpClass.toStereotypeModelArray().size > 0) vpClass.toStereotypeModelArray()[0].name
-                            else "Subkind"
+        else "Subkind"
         val ontoUmlClass = createOntoUmlClass(wrapper, vpClass, vpStereotype)
         wrapper.addOntoUMLClassifier(vpClass, ontoUmlClass)
     }
     return wrapper
 }
 
-fun addGeneralizations(wrapper: RefOntoUMLWrapper, vpDiagram: IDiagramUIModel) : RefOntoUMLWrapper {
-    for(generalizationElement in vpDiagram.toDiagramElementArray(IShapeTypeConstants.SHAPE_TYPE_GENERALIZATION)){
-        val vpGeneralization = generalizationElement.metaModelElement as IGeneralization
+fun addGeneralizations(wrapper: RefOntoUMLWrapper, vpProject: IProject) : RefOntoUMLWrapper {
+    vpProject.toAllLevelModelElementArray(IModelElementFactory.MODEL_TYPE_GENERALIZATION).forEach {
+        val vpGeneralization = it as IGeneralization
         if (vpGeneralization.generalizationSet == null){
             val parent = wrapper.getOntoUMLClassifier(vpGeneralization.from)
             val child = wrapper.getOntoUMLClassifier(vpGeneralization.to)
@@ -81,13 +77,13 @@ fun addGeneralizations(wrapper: RefOntoUMLWrapper, vpDiagram: IDiagramUIModel) :
     return wrapper
 }
 
-fun addGeneralizationSets(wrapper: RefOntoUMLWrapper, vpDiagram: IDiagramUIModel) : RefOntoUMLWrapper {
-    for (genSetElement in vpDiagram.toDiagramElementArray(IShapeTypeConstants.SHAPE_TYPE_GENERALIZATION_SET)){
-        val vpGenSet = genSetElement.metaModelElement as IGeneralizationSet
+fun addGeneralizationSets(wrapper: RefOntoUMLWrapper, vpProject: IProject) : RefOntoUMLWrapper {
+    vpProject.toAllLevelModelElementArray(IModelElementFactory.MODEL_TYPE_GENERALIZATION_SET).forEach {
+        val vpGenSet = it as IGeneralizationSet
         val genIterator = vpGenSet.generalizationIterator()
         val generalizations : MutableList<Generalization> = ArrayList()
-        while (genIterator.hasNext()) {
-            val gen = genIterator.next() as IGeneralization
+        genIterator.forEach {
+            val gen = it as IGeneralization
             val generalization = RefOntoUMLFactoryUtil.createGeneralization(wrapper.getOntoUMLClassifier(gen.to), wrapper.getOntoUMLClassifier(gen.from))
             generalizations.add(generalization)
         }
@@ -96,11 +92,11 @@ fun addGeneralizationSets(wrapper: RefOntoUMLWrapper, vpDiagram: IDiagramUIModel
     return wrapper
 }
 
-fun addAssociations(wrapper: RefOntoUMLWrapper, vpDiagram: IDiagramUIModel) : RefOntoUMLWrapper {
-    for (associationElement in vpDiagram.toDiagramElementArray(IShapeTypeConstants.SHAPE_TYPE_ASSOCIATION)) {
-        val vpAssociation = associationElement.metaModelElement as IAssociation
+fun addAssociations(wrapper: RefOntoUMLWrapper, vpProject: IProject) : RefOntoUMLWrapper {
+    vpProject.toAllLevelModelElementArray(IModelElementFactory.MODEL_TYPE_ASSOCIATION).forEach {
+        val vpAssociation = it as IAssociation
         val vpStereotype = if (vpAssociation.toStereotypeArray().size > 0) vpAssociation.toStereotypeArray()[0]
-                            else ""
+        else ""
         createOntoUmlAssociation(wrapper, vpAssociation, vpStereotype)
     }
     return wrapper

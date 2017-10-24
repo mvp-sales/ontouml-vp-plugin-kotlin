@@ -14,25 +14,30 @@ class ValidateOntoUMLModelController : VPActionController {
     }
 
     override fun performAction(p0: VPAction?) {
-        val diagram = ApplicationManager.instance().diagramManager.activeDiagram
+        val project = ApplicationManager.instance().projectManager.project
         val viewManager = ApplicationManager.instance().viewManager
 
-        createObservableWrapper(diagram)
+        viewManager.clearMessages("br.ufes.inf.ontoumlplugin")
+
+        createObservableWrapper(project)
             .observeOn(Schedulers.computation())
             .flatMap { wrapper -> getVerificator(wrapper) }
             .observeOn(Schedulers.trampoline())
             .subscribe(
                 { verificator ->
-                    viewManager.showMessage(verificator.result)
+                    viewManager.showMessage(verificator.result, "br.ufes.inf.ontoumlplugin")
                     for (elem in verificator.map.keys){
-                        viewManager.showMessage(elem.toString())
+                        viewManager.showMessage(elem.toString(), "br.ufes.inf.ontoumlplugin")
                         val values = ArrayList(verificator.map[elem])
                         for (message in values){
-                            viewManager.showMessage(message)
+                            viewManager.showMessage(message, "br.ufes.inf.ontoumlplugin")
                         }
                     }
                 },
-                { err -> viewManager.showMessage(err.message) }
+                { err ->
+                    viewManager.showMessage(err.message, "br.ufes.inf.ontoumlplugin")
+                    err.printStackTrace()
+                }
             )
     }
 }

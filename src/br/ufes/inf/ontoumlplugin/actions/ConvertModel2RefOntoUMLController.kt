@@ -14,14 +14,14 @@ import javax.swing.filechooser.FileNameExtensionFilter
 class ConvertModel2RefOntoUMLController : VPActionController {
 
     override fun update(p0: VPAction?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun performAction(p0: VPAction?) {
-        val diagram = ApplicationManager.instance().diagramManager.activeDiagram
+        val project = ApplicationManager.instance().projectManager.project
         val viewManager = ApplicationManager.instance().viewManager
 
-        createObservableWrapper(diagram)
+        createObservableWrapper(project)
             .subscribeOn(Schedulers.computation())
             .observeOn(Schedulers.trampoline())
             .subscribe(
@@ -29,7 +29,7 @@ class ConvertModel2RefOntoUMLController : VPActionController {
                     val fileChooser = viewManager.createJFileChooser()
                     val filter = FileNameExtensionFilter("Reference OntoUML (*.refontouml)", "refontouml")
                     fileChooser.fileFilter = filter
-                    fileChooser.dialogTitle = "Selecione o diretório de destino"
+                    fileChooser.dialogTitle = "Select the destination directory"
                     fileChooser.dialogType = JFileChooser.SAVE_DIALOG
                     val returnValue = fileChooser.showSaveDialog(null)
 
@@ -48,9 +48,10 @@ class ConvertModel2RefOntoUMLController : VPActionController {
                         }else{
                             RefOntoUMLResourceUtil.saveModel(file.absolutePath, wrapper.ontoUmlPackage)
                         }
+                        viewManager.showMessage("Model saved at ${file.absolutePath}", "br.ufes.inf.ontoumlplugin")
                     }
                 },
-                { err -> viewManager.showMessage(err.message) }
+                { err -> viewManager.showMessage(err.message, "br.ufes.inf.ontoumlplugin") }
             )
     }
 }

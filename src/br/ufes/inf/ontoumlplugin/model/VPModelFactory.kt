@@ -68,7 +68,7 @@ fun setVPAttributes(vpClass: IClass, ontoUmlElement: Classifier) : IClass {
 }
 
 fun setMeronymicAssociation(vpAssociation : IAssociation, ontoUmlAssociation : RefOntoUML.Meronymic, project : IProject) : IAssociation {
-    var stereotype : IStereotype?
+    val stereotype : IStereotype?
 
     if(ontoUmlAssociation is RefOntoUML.memberOf){
         stereotype = addStereotypeAssociation(vpAssociation, "MemberOf", project);
