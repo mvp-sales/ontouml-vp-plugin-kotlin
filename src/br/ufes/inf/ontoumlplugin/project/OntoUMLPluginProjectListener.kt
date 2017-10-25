@@ -11,45 +11,51 @@ import com.vp.plugin.model.ITaggedValueDefinition
 class OntoUMLPluginProjectListener : IProjectListener {
 
     val viewManager = ApplicationManager.instance().viewManager
+    private var stateProjectListener = AppConstants.UNSPECIFIED
 
     override fun projectNewed(p0: IProject?) {
-
+        stateProjectListener = AppConstants.NEWED
     }
 
     override fun projectPreSave(p0: IProject?) {
-
+        stateProjectListener = AppConstants.PRESAVE
     }
 
     override fun projectSaved(p0: IProject?) {
-
+        stateProjectListener = AppConstants.SAVED
     }
 
     override fun projectRenamed(p0: IProject?) {
+        if (stateProjectListener == AppConstants.NEWED) {
+            val stereotypes = HashMap<String, IStereotype>()
 
+            p0?.toAllLevelModelElementArray(IModelElementFactory.MODEL_TYPE_STEREOTYPE)?.forEach {
+                val stereotype = it as IStereotype
+                stereotypes.put(stereotype.name, stereotype)
+            }
+            addOntoUMLStereotypes(stereotypes)
+        }
+
+        stateProjectListener = AppConstants.RENAMED
     }
 
     override fun projectAfterOpened(p0: IProject?) {
-        val stereotypes = HashMap<String, IStereotype>()
-
-        p0?.toAllLevelModelElementArray(IModelElementFactory.MODEL_TYPE_STEREOTYPE)?.forEach {
-            val stereotype = it as IStereotype
-            stereotypes.put(stereotype.name, stereotype)
-        }
-        addOntoUMLStereotypes(stereotypes)
+        stateProjectListener = AppConstants.AFTER_OPENED
     }
 
     override fun projectOpened(p0: IProject?) {
-
+        stateProjectListener = AppConstants.OPENED
     }
 
     private fun addOntoUMLStereotypes(stereotypes: Map<String, IStereotype>) {
         addClassStereotypes(stereotypes)
         addNonPartWholeAssociationStereotypes(stereotypes)
         addPartWholeStereotypes(stereotypes)
+        viewManager.showMessage("OntoUML Stereotypes loaded successfully.", AppConstants.PLUGIN_ID)
     }
 
     private fun addClassStereotypes(stereotypes: Map<String, IStereotype>) {
-        val classTypes = arrayOf("Mediation", "Subkind", "Role", "Phase", "Category", "RoleMixin",
+        val classTypes = arrayOf("Kind", "Subkind", "Role", "Phase", "Category", "RoleMixin",
                                 "Mixin", "Relator", "Mode", "Quality", "Collective", "Quantity",
                                 "DataType", "PerceivableQuality", "NonPerceivableQuality","NominalQuality",
                                 "PrimitiveType")
@@ -58,7 +64,7 @@ class OntoUMLPluginProjectListener : IProjectListener {
             if (stereotypes.containsKey(it)){
                 val stereotype = stereotypes[it]
                 if (stereotype?.baseType !== IModelElementFactory.MODEL_TYPE_CLASS){
-                    viewManager.showMessage("Stereotype $it already existent with base type ${stereotype?.baseType}", "br.ufes.inf.ontoumlplugin")
+                    viewManager.showMessage("Stereotype $it already existent with base type ${stereotype?.baseType}", AppConstants.PLUGIN_ID)
                 }
             }else{
                 val stereotype: IStereotype = IModelElementFactory.instance().createStereotype()
@@ -70,23 +76,13 @@ class OntoUMLPluginProjectListener : IProjectListener {
     }
 
     private fun addNonPartWholeAssociationStereotypes(stereotypes: Map<String, IStereotype>) {
-        val associationTypes = arrayOf("Formal", "Mediation", "Material", "Derivation", "Characterization", "Structuration")
-
-        for (associationType in associationTypes) {
-            try {
-                val stereotype = IModelElementFactory.instance().createStereotype()
-                stereotype.name = associationType
-                stereotype.baseType = IModelElementFactory.MODEL_TYPE_ASSOCIATION
-            }catch (e : Exception){
-
-            }
-        }
+        val associationTypes = arrayOf("FormalAssociation", "Mediation", "MaterialAssociation", "Derivation", "Characterization", "Structuration")
 
         associationTypes.forEach {
             if (stereotypes.containsKey(it)){
                 val stereotype = stereotypes[it]
                 if (stereotype?.baseType !== IModelElementFactory.MODEL_TYPE_ASSOCIATION){
-                    viewManager.showMessage("Stereotype $it already existent with base type ${stereotype?.baseType}", "br.ufes.inf.ontoumlplugin")
+                    viewManager.showMessage("Stereotype $it already existent with base type ${stereotype?.baseType}", AppConstants.PLUGIN_ID)
                 }
             }else{
                 val stereotype: IStereotype = IModelElementFactory.instance().createStereotype()
@@ -125,4 +121,15 @@ class OntoUMLPluginProjectListener : IProjectListener {
 
         stereotype.taggedValueDefinitions = taggedValueDefinitionContainer
     }
+}
+
+object AppConstants {
+    const val UNSPECIFIED = 0
+    const val NEWED = 1
+    const val PRESAVE = 2
+    const val SAVED = 3
+    const val RENAMED = 4
+    const val OPENED = 5
+    const val AFTER_OPENED = 6
+    const val PLUGIN_ID = "br.ufes.inf.ontoumlplugin"
 }

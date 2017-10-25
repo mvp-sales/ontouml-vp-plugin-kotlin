@@ -21,11 +21,12 @@ enum class OntoUMLRelationshipType(val text: String) {
         }
 
         fun getStereotypeFromString(project: IProject, text: String): IStereotype? {
-            val stereotypes = project.toModelElementArray(IModelElementFactory.MODEL_TYPE_STEREOTYPE)
-            for (e in stereotypes) {
-                val s = e as IStereotype
-                if (s.name.equals(text, true)) {
-                    return s
+            val stereotypes = project.toAllLevelModelElementArray(IModelElementFactory.MODEL_TYPE_STEREOTYPE)
+            stereotypes.forEach {
+                val stereotype = it as IStereotype
+                if (stereotype.baseType == IModelElementFactory.MODEL_TYPE_ASSOCIATION &&
+                        stereotype.name.equals(text, true)) {
+                    return stereotype
                 }
             }
             return null

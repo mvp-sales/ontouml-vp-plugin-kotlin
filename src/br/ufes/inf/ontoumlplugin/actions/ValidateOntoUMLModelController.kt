@@ -2,6 +2,7 @@ package br.ufes.inf.ontoumlplugin.actions
 
 import br.ufes.inf.ontoumlplugin.model.createObservableWrapper
 import br.ufes.inf.ontoumlplugin.model.getVerificator
+import br.ufes.inf.ontoumlplugin.project.AppConstants
 import com.vp.plugin.ApplicationManager
 import com.vp.plugin.action.VPAction
 import com.vp.plugin.action.VPActionController
@@ -17,7 +18,7 @@ class ValidateOntoUMLModelController : VPActionController {
         val project = ApplicationManager.instance().projectManager.project
         val viewManager = ApplicationManager.instance().viewManager
 
-        viewManager.clearMessages("br.ufes.inf.ontoumlplugin")
+        viewManager.clearMessages(AppConstants.PLUGIN_ID)
 
         createObservableWrapper(project)
             .observeOn(Schedulers.computation())
@@ -25,17 +26,17 @@ class ValidateOntoUMLModelController : VPActionController {
             .observeOn(Schedulers.trampoline())
             .subscribe(
                 { verificator ->
-                    viewManager.showMessage(verificator.result, "br.ufes.inf.ontoumlplugin")
+                    viewManager.showMessage(verificator.result, AppConstants.PLUGIN_ID)
                     for (elem in verificator.map.keys){
-                        viewManager.showMessage(elem.toString(), "br.ufes.inf.ontoumlplugin")
+                        viewManager.showMessage(elem.toString(), AppConstants.PLUGIN_ID)
                         val values = ArrayList(verificator.map[elem])
                         for (message in values){
-                            viewManager.showMessage(message, "br.ufes.inf.ontoumlplugin")
+                            viewManager.showMessage(message, AppConstants.PLUGIN_ID)
                         }
                     }
                 },
                 { err ->
-                    viewManager.showMessage(err.message, "br.ufes.inf.ontoumlplugin")
+                    viewManager.showMessage(err.message, AppConstants.PLUGIN_ID)
                     err.printStackTrace()
                 }
             )
